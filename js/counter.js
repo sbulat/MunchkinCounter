@@ -1,3 +1,20 @@
+var whoWins = function(wC, plyr, monstr){
+  var $result = $('p.fight-result');
+  if( wC == true){
+    if(plyr >= monstr) {
+      $result.text("Pokonałeś potwora!");
+    }else{
+      $result.text("Zostałeś pokonany!");
+    }
+  }else{
+    if(plyr > monstr) {
+      $result.text("Pokonałeś potwora!");
+    }else{
+      $result.text("Zostałeś pokonany!");
+    }
+  }
+}
+
 var counter = function() {
   var plyrStats;
   var monstrStats;
@@ -17,7 +34,7 @@ var counter = function() {
     plyrBonus = monstrBonus = 0;
     $('p.plyr').text("Ty: " + plyrStats);
     $('p.monstr').text("Potwór: " + monstrStats);
-    warriorCheck = $('input#warrior').prop("checked");
+    // warriorCheck = $('input#warrior').prop("checked");
     whoWins(warriorCheck, plyrStats+plyrBonus, monstrStats+monstrBonus);
     $('.on-fight, .fight-row').show();
   });
@@ -28,7 +45,7 @@ var counter = function() {
       plyrBonus = 0;
     }
     $('p.plyr').text("Ty: " + (plyrStats+plyrBonus));
-    warriorCheck = $('input#warrior').prop("checked");
+    // warriorCheck = $('input#warrior').prop("checked");
     whoWins(warriorCheck, plyrStats+plyrBonus, monstrStats+monstrBonus);
   });
 
@@ -38,30 +55,14 @@ var counter = function() {
       monstrBonus = 0;
     }
     $('p.monstr').text("Potwór: " + (monstrStats+monstrBonus));
-    warriorCheck = $('input#warrior').prop("checked");
+    // warriorCheck = $('input#warrior').prop("checked");
     whoWins(warriorCheck, plyrStats+plyrBonus, monstrStats+monstrBonus);
   });
 
   $('input#end-btn').click(function() {
+    $('input#plyr-lvl, input#plyr-arm, input#monstr-lvl, input#plyr-bonus, input#monstr-bonus').val('0');
     $('.on-fight, .fight-row').hide();
   });
-}
-
-var whoWins = function(wC, plyr, monstr){
-  var $result = $('p.fight-result');
-  if( wC == true){
-    if(plyr >= monstr) {
-      $result.text("Pokonałeś potwora!");
-    }else{
-      $result.text("Zostałeś pokonany!");
-    }
-  }else{
-    if(plyr > monstr) {
-      $result.text("Pokonałeś potwora!");
-    }else{
-      $result.text("Zostałeś pokonany!");
-    }
-  }
 }
 
 $(document).ready(counter);
