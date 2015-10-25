@@ -6,7 +6,7 @@ html, body{
 
 .main{
   padding: 0 10px;
-  width: 960px;
+  max-width: 960px;
   background-color: #efefef;
   margin: 0 auto;
 }
@@ -34,5 +34,14 @@ html, body{
 
 .result-col{
   font: 30px Arial;
+  text-align: center;
+}
+
+footer{
+  font-size: 10px;
+  padding-top: 4px;
+  width: 960px;
+  background-color: #efefef;
+  margin: 0 auto;
   text-align: center;
 }
