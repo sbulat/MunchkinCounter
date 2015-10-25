@@ -31,12 +31,20 @@ var changeField = function(field, add) {
   }
 }
 
+var zeroingInputs = function() {
+  $('input#plyr-lvl, input#plyr-arm, input#monstr-lvl, input#plyr-bonus, input#monstr-bonus').val('0');
+  $('input#warrior').prop("checked", false);
+}
+
 var counter = function() {
   var plyrStats;
   var monstrStats;
   var plyrBonus;
   var monstrBonus;
   var warriorCheck;
+
+  //zeroing all inputs 
+  zeroingInputs();
 
   // Check the field "Jesteś wojownikiem?"
   $('input#warrior').click(function() {
@@ -49,14 +57,14 @@ var counter = function() {
   // -set the values "Ty" and "Potwór"
   // -set the the result of fight depending on fields mentioned before and the field named "Jesteś wojownikiem?"
   $('button#start-btn').click(function() {
-    if( !( ($('input#plyr-lvl').val() == 0) || ($('input#monstr-lvl').val() == 0) ) ){
-      plyrStats = parseInt( ($('input#plyr-lvl').val().length) ? $('input#plyr-lvl').val() : 1 ) 
-        + parseInt( ($('input#plyr-arm').val().length) ? $('input#plyr-arm').val() : 0 );
-      monstrStats = parseInt( $('input#monstr-lvl').val().length ? $('input#monstr-lvl').val() : 0);
+    if( !( ($('input#plyr-lvl').val() == 0) || ($('input#monstr-lvl').val() == 0) ) ){ //check if inputs == 0
+      plyrStats = parseInt( ($('input#plyr-lvl').val().length) ? $('input#plyr-lvl').val() : 1 )        // true => set the values
+        + parseInt( ($('input#plyr-arm').val().length) ? $('input#plyr-arm').val() : 0 );               // of player and monster lvls
+      monstrStats = parseInt( $('input#monstr-lvl').val().length ? $('input#monstr-lvl').val() : 0);    // in corresponding <p>
       plyrBonus = monstrBonus = 0;
       $('p.plyr').text("Ty: " + plyrStats);
       $('p.monstr').text("Potwór: " + monstrStats);
-      whoWins(warriorCheck, plyrStats+plyrBonus, monstrStats+monstrBonus);
+      whoWins(warriorCheck, plyrStats+plyrBonus, monstrStats+monstrBonus);                              // also set WIN or LOSE div
       $('.on-fight, .fight-row').show();
     }else{
       alert("Podaj poziom Twój i/lub potwora!");
@@ -65,9 +73,10 @@ var counter = function() {
 
   // Update player's fighting level after every change of the field "Twój bonus"
   $('input#plyr-bonus').keyup(function() {
-    plyrBonus = parseInt($(this).val());
     if( $(this).val().length == 0 ){
       plyrBonus = 0;
+    }else{
+      plyrBonus = parseInt($(this).val());
     }
     $('p.plyr').text("Ty: " + (plyrStats+plyrBonus));
     whoWins(warriorCheck, plyrStats+plyrBonus, monstrStats+monstrBonus);
@@ -75,36 +84,49 @@ var counter = function() {
 
   // Update monster's fighting level after every change of the field "Bonus potwora"
   $('input#monstr-bonus').keyup(function() {
-    monstrBonus = parseInt($(this).val());
     if( $(this).val().length == 0 ){
       monstrBonus = 0;
+    }else{
+      monstrBonus = parseInt($(this).val());
     }
     $('p.monstr').text("Potwór: " + (monstrStats+monstrBonus));
     whoWins(warriorCheck, plyrStats+plyrBonus, monstrStats+monstrBonus);
   });
 
+  // Adding and substracting bonuses using 'plus' and 'minus' buttons
+  $('button.change').click( function() {
+    var $input; 
 
-  // Four commands about adding and substracting bonuses using 'plus' and 'minus' buttons
-  $('button#plyr-plus').click( function() {
-    changeField($('input#plyr-bonus'), 1);
-  });
+    if( $(this).hasClass('plyr') ){
+      $input= $('input#plyr-bonus');
+      changeField($input, $(this).hasClass('plus'))
 
-  $('button#plyr-minus').click( function() {
-    changeField($('input#plyr-bonus'), 0);
-  });
+      if( $input.val().length != 0 ){
+        plyrBonus = parseInt($input.val());
+      }else{
+        plyrBonus = 0;
+      }
+      $('p.plyr').text("Ty: " + (plyrStats+plyrBonus));
+      
+    }else{
+      $input= $('input#monstr-bonus');
+      changeField($input, $(this).hasClass('plus'))
 
-  $('button#monstr-plus').click( function() {
-    changeField($('input#monstr-bonus'), 1);
-  });
-  
-  $('button#monstr-minus').click( function() {
-    changeField($('input#monstr-bonus'), 0);
+      if( $input.val().length != 0 ){
+        monstrBonus = parseInt($input.val());
+      }else{
+        monstrBonus = 0;
+      }
+      $('p.monstr').text("Potwór: " + (monstrStats+monstrBonus));
+    }
+
+    whoWins(warriorCheck, plyrStats+plyrBonus, monstrStats+monstrBonus);
   });
   //--------------------------------------------------------------------------------------
 
   // Click the button "Koniec walki"
   $('button#end-btn').click(function() {
-    $('input#plyr-lvl, input#plyr-arm, input#monstr-lvl, input#plyr-bonus, input#monstr-bonus').val('0');
+    zeroingInputs();
     $('.on-fight, .fight-row').hide();
   });
 }
